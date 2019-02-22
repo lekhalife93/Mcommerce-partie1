@@ -2,6 +2,7 @@ package com.ecommerce.microcommerce.web.controller;
 
 import com.ecommerce.microcommerce.dao.ProductDao;
 import com.ecommerce.microcommerce.model.Product;
+import com.ecommerce.microcommerce.web.exceptions.ProduitGratuitException;
 import com.ecommerce.microcommerce.web.exceptions.ProduitIntrouvableException;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -67,9 +68,13 @@ public class ProductController {
 
     //ajouter un produit
     @PostMapping(value = "/Produits")
-
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
-
+    	
+    	//Partie 3 : Si le prix de vente est de 0, lancez une exception du nom de  ProduitGratuitException  (à créer) qui retournera le bon code HTTP pour ce cas avec un message explicatif que vous définirez.
+    	if (product.getPrix() == 0) {
+			throw new ProduitGratuitException("On ne peut ajouter un produit gratuit. Merci de saisir un prix !");
+		}
+    	
         Product productAdded =  productDao.save(product);
 
         if (productAdded == null)
