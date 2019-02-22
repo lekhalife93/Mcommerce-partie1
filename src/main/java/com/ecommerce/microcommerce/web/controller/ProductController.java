@@ -118,7 +118,14 @@ public class ProductController {
  	}
 
     
-	
+	// Partie2: Récupérer tout les produits par ordre alphabétique
+	@RequestMapping(value = "/ProduitsOrdreAlph", method = RequestMethod.GET)
+	public MappingJacksonValue trierProduitsParOrdreAlphabetique() {
+
+		List<Product> produits = productDao.findByOrderByName();
+		return new MappingJacksonValue(produits);
+
+	}
 	
 	
 }
